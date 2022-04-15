@@ -47,6 +47,7 @@ void	*maxheap;		/* highest valid memory address		*/
 void	nulluser(void)
 {
 	sysinit();
+	clkinit();
 
 	kprintf("\n\r%s\n\n\r", VERSION);
 

@@ -6,8 +6,8 @@ typedef	unsigned char	    byte;
 typedef unsigned int        word;
 typedef unsigned long       dword;
 typedef char                int8;
-typedef	short		    int16;
-typedef	int		    int32;
+typedef	short		   	 	int16;
+typedef	int		    		int32;
 typedef unsigned char       uint8;
 typedef	unsigned short	    uint16;
 typedef	unsigned int	    uint32;
@@ -26,6 +26,7 @@ typedef	byte	bool8;		/* Boolean type				*/
 typedef	uint16	intmask;	/* saved interrupt mask			*/
 typedef	int32	ibid32;		/* index block ID (used in file system)	*/
 typedef	int32	dbid32;		/* data block ID (used in file system)	*/
+typedef uint32 	mutex_t;	/* Added for this program! */
 
 /* Function declaration return types */
 
@@ -76,3 +77,4 @@ extern	struct queue	*readyqueue;
 
 /* config params */
 #define	AGING	TRUE		/* enable or disable aging? */
+#define QUANTUM 2			/* Size of quantum in milliiseconds */
