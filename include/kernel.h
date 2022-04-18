@@ -77,4 +77,4 @@ extern	struct queue	*readyqueue;
 
 /* config params */
 #define	AGING	TRUE		/* enable or disable aging? */
-#define QUANTUM 2			/* Size of quantum in milliiseconds */
+#define QUANTUM 10			/* Size of quantum in milliiseconds */
