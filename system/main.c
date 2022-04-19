@@ -70,21 +70,27 @@ void	philosopher(uint32 phil_id)
 		}
 		else //eat 30% of the time
 		{
-			//kprintf("What is happening [%u] [%u]\n",locker[left], locker[right]); 
-			//attempt to lock both forks
-			//if(locker[left] == FALSE && locker[right] == FALSE)
-			//{
-				
+			//Going with left bias just... becuase?
+			if(locker[left] == FALSE)
+			{
 				mutex_lock(&locker[left]);
-				mutex_lock(&locker[right]);
-				mutex_lock(&printLock);
-				kprintf("Philsopher %d eating: nom nom nom\n", phil_id);
-				mutex_unlock(&printLock);
-				eat();
-				mutex_unlock(&locker[left]);
-				mutex_unlock(&locker[right]);
-				
-			//}
+				if(locker[right] == FALSE) //we secured left, now try right
+				{
+					mutex_lock(&locker[right]);
+					mutex_lock(&printLock);
+					kprintf("Philsopher %d eating: nom nom nom\n", phil_id);
+					mutex_unlock(&printLock);
+					eat();
+					mutex_unlock(&locker[left]);
+					mutex_unlock(&locker[right]);
+				}
+				else //unable to secure both, release left
+				{
+					mutex_unlock(&locker[left]);
+					continue; //try again!
+				}
+			}
+			
 		}
 	}
 }
