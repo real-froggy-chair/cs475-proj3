@@ -71,26 +71,25 @@ void	philosopher(uint32 phil_id)
 		else //eat 30% of the time
 		{
 			//Going with left bias just... becuase?
-			if(locker[left] == FALSE)
+			//I wanted to do an if{lock == free} here but i realized there's the chance
+			//That the program could context switch between the check and the lock
+			//So instead we're just going to assume it CAN secure the fork to the left and then continue
+			mutex_lock(&locker[left]); 
+			if(locker[right] == FALSE) //we secured left, now try right 
 			{
-				mutex_lock(&locker[left]);
-				if(locker[right] == FALSE) //we secured left, now try right
-				{
-					mutex_lock(&locker[right]);
-					mutex_lock(&printLock);
-					kprintf("Philsopher %d eating: nom nom nom\n", phil_id);
-					mutex_unlock(&printLock);
-					eat();
-					mutex_unlock(&locker[left]);
-					mutex_unlock(&locker[right]);
-				}
-				else //unable to secure both, release left
-				{
-					mutex_unlock(&locker[left]);
-					continue; //try again!
-				}
+				mutex_lock(&locker[right]);
+				mutex_lock(&printLock);
+				kprintf("Philsopher %d eating: nom nom nom\n", phil_id);
+				mutex_unlock(&printLock);
+				eat();
+				mutex_unlock(&locker[left]);
+				mutex_unlock(&locker[right]);
 			}
-			
+			else //unable to secure both, release left
+			{
+				mutex_unlock(&locker[left]);
+				continue; //try again!
+			}
 		}
 	}
 }
